@@ -6,6 +6,13 @@ if [ ! -f ".env" ]; then
     cp .env.example .env
 fi
 
+# Завжди запускаємо composer install перед artisan командами
+echo "Installing Composer dependencies..."
+composer install --no-interaction || {
+    echo "Composer install failed. Check composer.json or network connectivity."
+    exit 1
+}
+
 # Генеруємо APP_KEY, якщо його немає або він порожній
 if ! grep -q "^APP_KEY=[^[:space:]]" .env || grep -q "^APP_KEY=$" .env; then
     echo "Generating APP_KEY..."
